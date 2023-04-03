@@ -2,17 +2,25 @@ const http = require("http")
 const host = process.env.HOST || "localhost"
 const port = process.env.PORT || 3000
 
-const requestHandler = (req, res) => {
+function jsonHandler(req, res) {
+  res.setHeader("Content-Type", "application/json")
+  res.end(JSON.stringify({ message: "Hello World" }))
+}
+
+function defaultHandler(req, res) {
+  res.setHeader("Content-Type", "text/plain")
+  res.end("Hello World")
+}
+
+function requestHandler(req, res) {
   res.statusCode = 200
   switch (req.url) {
     case "/json": {
-      res.setHeader("Content-Type", "application/json")
-      res.end(JSON.stringify({ message: "Hello World" }))
+      jsonHandler(req, res)
       break
     }
     default: {
-      res.setHeader("Content-Type", "text/plain")
-      res.end("Hello World")
+      defaultHandler(req, res)
       break
     }
   }
